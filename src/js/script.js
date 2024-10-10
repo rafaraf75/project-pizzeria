@@ -88,6 +88,7 @@ const select = {
       thisProduct.data = data;
 
       thisProduct.renderInMenu();
+      thisProduct.processOrder();
 
       console.log('new Product:', thisProduct);
     }
@@ -106,6 +107,27 @@ const select = {
 
       /* add element to menu */
       menuContainer.appendChild(thisProduct.element);
+    }
+
+    processOrder() {
+      const thisProduct = this;
+
+      /* Iterate through product parameters */
+      const params = thisProduct.data.params;
+
+      for (let paramId in params) {
+        const param = params[paramId];
+
+        /* Iterate through options */
+        for (let optionId in param.options) {
+          const option = param.options[optionId];
+
+          /* Example: Check if the option is default */
+          if (option.default) {
+            console.log('Default option:', optionId, option);
+          }
+        }
+      }
     }
   }
 
