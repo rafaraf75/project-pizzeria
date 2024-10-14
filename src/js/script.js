@@ -166,32 +166,34 @@ const select = {
     processOrder() {
       const thisProduct = this;
 
-      let price = thisProduct.data.price;
-
+      /* Convert form to object structure e.g. { sauce: ['tomato'], toppings: ['olives', 'redPeppers'] } */
       const formData = utils.serializeFormToObject(thisProduct.form);
       console.log('formData', formData);
 
-      /* Iterate through product parameters */
-      const params = thisProduct.data.params;
+      /* Set price to default price */
+      let price = thisProduct.data.price;
 
-      for (let paramId in params) {
-        const param = params[paramId];
+      /* For every category (param)... */
+      for (let paramId in thisProduct.data.params) {
+      const param = thisProduct.data.params[paramId];
 
-        /* Iterate through options */
+
+        /* For every option in this category*/
         for (let optionId in param.options) {
           const option = param.options[optionId];
-          const optionElement = thisProduct.form.querySelector(`[name="${paramId}"][value="${optionId}"]`);
 
-        if (optionElement) {
-          const optionSelected = optionElement.checked;
+          /* Check if the option is selected using formData */
+          const optionSelected = formData[paramId] && formData[paramId].includes(optionId);
+
+        if (optionSelected) {
 
           /* If the option is selected and not default, add its price */
-          if (optionSelected && !option.default) {
+          if (!option.default) {
             price += option.price;
           }
-
+        } else {
           /* If the option is not selected and it is default, subtract its price */
-        if (!optionSelected && option.default) {
+        if (option.default) {
           price -= option.price;
         }
       }
