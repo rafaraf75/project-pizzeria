@@ -281,7 +281,8 @@
       if (
         !isNaN(newValue) &&
         newValue >= settings.amountWidget.defaultMin &&
-        newValue <= settings.amountWidget.defaultMax
+        newValue <= settings.amountWidget.defaultMax &&
+        thisWidget.value !== newValue
       ) {
         thisWidget.value = newValue;
         thisWidget.input.value = thisWidget.value;
