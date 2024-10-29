@@ -78,7 +78,9 @@
     menuProduct: Handlebars.compile(
       document.querySelector(select.templateOf.menuProduct).innerHTML
     ),
-    cartProduct: Handlebars.compile(document.querySelector(select.templateOf.cartProduct).innerHTML),
+    cartProduct: Handlebars.compile(
+      document.querySelector(select.templateOf.cartProduct).innerHTML
+    ),
   };
 
   class Product {
@@ -223,17 +225,11 @@
           const optionSelected =
             formData[paramId] && formData[paramId].includes(optionId);
 
-          if (optionSelected) {
-            /* If the option is selected and not default, add its price */
-            if (!option.default) {
+            if (optionSelected && !option.default) {
               price += option.price;
-            }
-          } else {
-            /* If the option is not selected and it is default, subtract its price */
-            if (option.default) {
+            } else if (!optionSelected && option.default) {
               price -= option.price;
             }
-          }
 
           const optionImage = thisProduct.imageWrapper.querySelector(
             "." + paramId + "-" + optionId
@@ -272,12 +268,37 @@
       amount: thisProduct.amountWidget.value,
       priceSingle: thisProduct.priceSingle,
       price: thisProduct.priceSingle * thisProduct.amountWidget.value,
+      params: thisProduct.prepareCartProductParams(),
     };
 
     return productSummary;
   }
-}
 
+  prepareCartProductParams() {
+    const thisProduct = this;
+    const formData = utils.serializeFormToObject(thisProduct.form);
+    const params = {};
+
+    for (let paramId in thisProduct.data.params) {
+      const param = thisProduct.data.params[paramId];
+      params[paramId] = {
+        label: param.label,
+        options: {},
+      };
+
+      for (let optionId in param.options) {
+        const option = param.options[optionId];
+        const optionSelected =
+          formData[paramId] && formData[paramId].includes(optionId);
+
+        if (optionSelected) {
+          params[paramId].options[optionId] = option.label;
+        }
+      }
+    }
+    return params;
+  }
+}
   class AmountWidget {
     constructor(element) {
       const thisWidget = this;
@@ -308,7 +329,6 @@
       ) {
         thisWidget.value = newValue;
         thisWidget.input.value = thisWidget.value;
-
         thisWidget.announce();
       }
     }
@@ -333,7 +353,6 @@
 
     announce() {
       const thisWidget = this;
-
       const event = new Event('updated');
       thisWidget.element.dispatchEvent(event);
     }
