@@ -117,7 +117,6 @@
 
     getElements() {
       const thisProduct = this;
-
       thisProduct.accordionTrigger = thisProduct.element.querySelector(
         select.menuProduct.clickable
       );
@@ -246,10 +245,7 @@
       }
 
       thisProduct.priceSingle = price;
-
       price *= thisProduct.amountWidget.value;
-
-      /* Update calculated price in the DOM */
       thisProduct.priceElem.innerHTML = price;
     }
 
@@ -276,7 +272,7 @@
 
   prepareCartProductParams() {
     const thisProduct = this;
-    const formData = utils.serializeFormToObject(thisProduct.form);
+    const formData = utils.serializeFormToObject(thisProduct.form);//-(thisProduct.dom.form)
     const params = {};
 
     for (let paramId in thisProduct.data.params) {
@@ -325,8 +321,7 @@
         !isNaN(newValue) &&
         newValue >= settings.amountWidget.defaultMin &&
         newValue <= settings.amountWidget.defaultMax &&
-        thisWidget.value !== newValue
-      ) {
+        thisWidget.value !== newValue) {
         thisWidget.value = newValue;
         thisWidget.input.value = thisWidget.value;
         thisWidget.announce();
@@ -336,9 +331,10 @@
     initActions() {
       const thisWidget = this;
 
-      thisWidget.input.addEventListener("change", function () {
-        thisWidget.setValue(thisWidget.input.value);
-      });
+      thisWidget.input.addEventListener("change", function() {
+        thisWidget.setValue(thisWidget.input.value)
+    });
+
 
       thisWidget.linkDecrease.addEventListener("click", function (event) {
         event.preventDefault();
@@ -375,6 +371,8 @@
       thisCart.dom = {};
       thisCart.dom.wrapper = element;
       thisCart.dom.toggleTrigger = thisCart.dom.wrapper.querySelector(select.cart.toggleTrigger);
+      thisCart.dom.productList = thisCart.dom.wrapper.querySelector(select.cart.productList); //+
+
     }
 
     initActions() {
@@ -386,8 +384,13 @@
     }
 
     add(menuProduct) {
-      console.log('adding product', menuProduct);
-      this.products.push(menuProduct);
+      console.log("adding product", menuProduct);
+      const thisCart = this;
+      //this.products.push(menuProduct);
+      const generatedHTML = templates.cartProduct(menuProduct);
+      const generatedDOM = utils.createDOMFromHTML(generatedHTML);
+      thisCart.dom.productList.appendChild(generatedDOM);
+      thisCart.products.push(menuProduct);
     }
   }
 
