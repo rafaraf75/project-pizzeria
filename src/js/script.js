@@ -392,6 +392,7 @@
         thisCart.update();
       });
       thisCart.dom.productList.addEventListener('remove', function(event) {
+        console.log('Remove event received for product:', event.detail.cartProduct);
         thisCart.remove(event.detail.cartProduct);
       });
       thisCart.dom.form = thisCart.dom.wrapper.querySelector(select.cart.form);
@@ -412,10 +413,12 @@
 
     remove(cartProduct) {
       const thisCart = this;
+      console.log('Removing product:', cartProduct);
       cartProduct.dom.wrapper.remove();
       const index = thisCart.products.indexOf(cartProduct);
   if (index !== -1) {
     thisCart.products.splice(index, 1);
+    console.log('Product removed from cart products array');
   }
   thisCart.update();
 }
@@ -448,7 +451,6 @@
     sendOrder() {
       const thisCart = this;
       const url = settings.db.url + '/' + settings.db.orders;
-      console.log('URL:', url);
       const payload = {
         address: thisCart.dom.wrapper.querySelector('#address').value,
         phone: thisCart.dom.wrapper.querySelector('#phone').value,
@@ -460,10 +462,7 @@
       };
       for (let prod of thisCart.products) {
         payload.products.push(prod.getData());
-        console.log('Payload:', payload);
       }
-
-      console.log('Sending payload:', payload);
 
       const options = {
         method: 'POST',
@@ -474,12 +473,14 @@
       };
 
     fetch(url, options)
-    .then(function (response) {
-      return response.json();
-    })
-    .then(function (parsedResponse) {
+    .then((response) => response.json())
+    .then((parsedResponse) => {
       console.log('Order sent:', parsedResponse);
+      thisCart.products.forEach((product) => {
+        product.orderId = parsedResponse.id;
+      });
     })
+
     .catch(function (error) {
       console.error('Error sending order:', error);
     });
@@ -497,12 +498,14 @@
       thisCartProduct.priceSingle = menuProduct.priceSingle;
       thisCartProduct.price = menuProduct.price;
       thisCartProduct.params = menuProduct.params;
+      thisCartProduct.orderId = null;
 
       thisCartProduct.getElements(element);
       thisCartProduct.initAmountWidget();
       thisCartProduct.initActions();
 
     }
+
     getElements(element) {
       const thisCartProduct = this;
 
@@ -526,25 +529,12 @@
       });
     }
 
-    remove() {
-      const thisCartProduct = this;
-
-      const event = new CustomEvent('remove', {
-        bubbles: true,
-        detail: {
-          cartProduct: thisCartProduct,
-        },
-      });
-
-      thisCartProduct.dom.wrapper.dispatchEvent(event);
-    }
-
     initActions() {
       const thisCartProduct = this;
 
       thisCartProduct.dom.edit.addEventListener('click', function(event) {
         event.preventDefault();
-        // na razie puste
+        // empty
       });
 
       thisCartProduct.dom.remove.addEventListener('click', function(event) {
@@ -552,6 +542,43 @@
         thisCartProduct.remove();
       });
     }
+
+    remove() {
+      const thisCartProduct = this;
+
+      if (!thisCartProduct.orderId) {
+        console.warn('Attempted to remove a product without an orderId');
+        return;
+      }
+
+      const url = `${settings.db.url}/${settings.db.orders}/${thisCartProduct.orderId}`;
+
+      fetch(url, { method: 'DELETE' })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Error deleting product from server');
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log('Product deleted from server:', data);
+
+          thisCartProduct.orderId = null;
+
+          const event = new CustomEvent('remove', {
+            bubbles: true,
+            detail: {
+              cartProduct: thisCartProduct,
+            },
+          });
+          thisCartProduct.dom.wrapper.dispatchEvent(event);
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        })
+        .finally(() => {
+    });
+  }
 
     getData() {
       const thisCartProduct = this;
@@ -563,6 +590,7 @@
         priceSingle: thisCartProduct.priceSingle,
         name: thisCartProduct.name,
         params: thisCartProduct.params,
+        orderId: thisCartProduct.orderId,
       };
     }
 
@@ -590,7 +618,6 @@
         console.error('Błąd podczas pobierania danych:', error);
       });
     },
-
 
     initMenu: function () {
       const thisApp = this;
