@@ -459,8 +459,6 @@
         payload.products.push(prod.getData());
       }
 
-      console.log('Sending payload:', payload);
-
       const options = {
         method: 'POST',
         headers: {
@@ -572,7 +570,6 @@
         return rawResponse.json();
       })
       .then(function (parsedResponse) {
-        console.log('parsedResponse', parsedResponse);
 
         thisApp.data.products = parsedResponse;
 
