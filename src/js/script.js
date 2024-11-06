@@ -36,7 +36,7 @@
     cart: {
       productList: '.cart__order-summary',
       toggleTrigger: '.cart__summary',
-      totalNumber: `.cart__total-number`,
+      totalNumber: '.cart__total-number',
       totalPrice: '.cart__total-price strong, .cart__order-total .cart__order-price-sum strong',
       subtotalPrice: '.cart__order-subtotal .cart__order-price-sum strong',
       deliveryFee: '.cart__order-delivery .cart__order-price-sum strong',
@@ -102,7 +102,6 @@
       thisProduct.initOrderForm();
       thisProduct.initAmountWidget();
       thisProduct.processOrder();
-
     }
 
     renderInMenu() {
@@ -254,7 +253,6 @@
       thisProduct.priceElem.innerHTML = price;
     }
 
-
   addToCart() {
     const thisProduct = this;
     app.cart.add(thisProduct.prepareCartProduct());
@@ -392,7 +390,6 @@
         thisCart.update();
       });
       thisCart.dom.productList.addEventListener('remove', function(event) {
-        console.log('Remove event received for product:', event.detail.cartProduct);
         thisCart.remove(event.detail.cartProduct);
       });
       thisCart.dom.form = thisCart.dom.wrapper.querySelector(select.cart.form);
@@ -413,12 +410,10 @@
 
     remove(cartProduct) {
       const thisCart = this;
-      console.log('Removing product:', cartProduct);
       cartProduct.dom.wrapper.remove();
       const index = thisCart.products.indexOf(cartProduct);
   if (index !== -1) {
     thisCart.products.splice(index, 1);
-    console.log('Product removed from cart products array');
   }
   thisCart.update();
 }
@@ -452,8 +447,8 @@
       const thisCart = this;
       const url = settings.db.url + '/' + settings.db.orders;
       const payload = {
-        address: thisCart.dom.wrapper.querySelector('#address').value,
-        phone: thisCart.dom.wrapper.querySelector('#phone').value,
+        address: thisCart.dom.wrapper.querySelector(select.cart.address).value,
+        phone: thisCart.dom.wrapper.querySelector(select.cart.phone).value,
         totalPrice: thisCart.totalPrice,
         subtotalPrice: thisCart.subtotalPrice,
         totalNumber: thisCart.totalNumber,
@@ -464,6 +459,8 @@
         payload.products.push(prod.getData());
       }
 
+      console.log('Sending payload:', payload);
+
       const options = {
         method: 'POST',
         headers: {
@@ -471,26 +468,22 @@
         },
         body: JSON.stringify(payload),
       };
-
-    fetch(url, options)
-    .then((response) => response.json())
-    .then((parsedResponse) => {
-      console.log('Order sent:', parsedResponse);
-      thisCart.products.forEach((product) => {
-        product.orderId = parsedResponse.id;
-      });
+      fetch(url, options)
+    .then(function (response) {
+      return response.json();
     })
-
+    .then(function (parsedResponse) {
+      console.log('Order sent:', parsedResponse);
+    })
     .catch(function (error) {
       console.error('Error sending order:', error);
     });
   }
-}
+ }
 
   class CartProduct {
     constructor(menuProduct, element) {
       const thisCartProduct = this;
-
 
       thisCartProduct.id = menuProduct.id;
       thisCartProduct.name = menuProduct.name;
@@ -498,12 +491,10 @@
       thisCartProduct.priceSingle = menuProduct.priceSingle;
       thisCartProduct.price = menuProduct.price;
       thisCartProduct.params = menuProduct.params;
-      thisCartProduct.orderId = null;
 
       thisCartProduct.getElements(element);
       thisCartProduct.initAmountWidget();
       thisCartProduct.initActions();
-
     }
 
     getElements(element) {
@@ -529,12 +520,24 @@
       });
     }
 
+    remove() {
+      const thisCartProduct = this;
+
+      const event = new CustomEvent('remove', {
+        bubbles: true,
+        detail: {
+          cartProduct: thisCartProduct,
+        },
+      });
+
+      thisCartProduct.dom.wrapper.dispatchEvent(event);
+    }
+
     initActions() {
       const thisCartProduct = this;
 
       thisCartProduct.dom.edit.addEventListener('click', function(event) {
         event.preventDefault();
-        // empty
       });
 
       thisCartProduct.dom.remove.addEventListener('click', function(event) {
@@ -542,43 +545,6 @@
         thisCartProduct.remove();
       });
     }
-
-    remove() {
-      const thisCartProduct = this;
-
-      if (!thisCartProduct.orderId) {
-        console.warn('Attempted to remove a product without an orderId');
-        return;
-      }
-
-      const url = `${settings.db.url}/${settings.db.orders}/${thisCartProduct.orderId}`;
-
-      fetch(url, { method: 'DELETE' })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error('Error deleting product from server');
-          }
-          return response.json();
-        })
-        .then((data) => {
-          console.log('Product deleted from server:', data);
-
-          thisCartProduct.orderId = null;
-
-          const event = new CustomEvent('remove', {
-            bubbles: true,
-            detail: {
-              cartProduct: thisCartProduct,
-            },
-          });
-          thisCartProduct.dom.wrapper.dispatchEvent(event);
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-        })
-        .finally(() => {
-    });
-  }
 
     getData() {
       const thisCartProduct = this;
@@ -590,10 +556,8 @@
         priceSingle: thisCartProduct.priceSingle,
         name: thisCartProduct.name,
         params: thisCartProduct.params,
-        orderId: thisCartProduct.orderId,
       };
     }
-
   }
 
   const app = {
