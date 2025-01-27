@@ -41,7 +41,7 @@ class Booking {
       eventsRepeat:
       settings.db.url + "/" + settings.db.events + "?" + params.eventsRepeat.join("&"),
     };
-    console.log('getData urls', urls);
+    //console.log('getData urls', urls);
 
     Promise.all([
       fetch(urls.bookings),
@@ -59,9 +59,9 @@ class Booking {
         ]);
       })
       .then(function ([bookings, eventsCurrent, eventsRepeat]) {
-        console.log("Bookings:",bookings);
-        console.log("EventsCurrent:",eventsCurrent);
-        console.log("EventsRepeat:",eventsRepeat);
+        //console.log("Bookings:",bookings);
+        //console.log("EventsCurrent:",eventsCurrent);
+        //console.log("EventsRepeat:",eventsRepeat);
         thisBooking.parseData(bookings, eventsCurrent, eventsRepeat);
       });
   }
@@ -70,10 +70,6 @@ class Booking {
     const thisBooking = this;
 
     thisBooking.booked = {};
-
-    console.log("parseData - bookings:", bookings);
-  console.log("parseData - eventsCurrent:", eventsCurrent);
-  console.log("parseData - eventsRepeat:", eventsRepeat);
 
     for (let item of bookings) {
       thisBooking.makeBooked(item.date, item.hour, item.duration, item.table);
@@ -101,7 +97,7 @@ class Booking {
         }
       }
     }
-    console.log("thisBooking.booked", thisBooking.booked);
+    //console.log("thisBooking.booked", thisBooking.booked);
     thisBooking.updateDOM();
   }
 
@@ -114,12 +110,6 @@ class Booking {
 
     const startHour = utils.hourToNumber(hour);
 
-    if (typeof thisBooking.booked[date][startHour] == "undefined") {
-      thisBooking.booked[date][startHour] = {};
-    }
-
-    thisBooking.booked[date][startHour].push(table);
-
     for (
       let hourBlock = startHour;
       hourBlock < startHour + duration;
@@ -127,7 +117,7 @@ class Booking {
     ) {
       //console.log('loop', hourBlock);
       if (typeof thisBooking.booked[date][hourBlock] == "undefined") {
-        thisBooking.booked[date][hourBlock] = {};
+        thisBooking.booked[date][hourBlock] = [];
       }
 
       thisBooking.booked[date][hourBlock].push(table);
