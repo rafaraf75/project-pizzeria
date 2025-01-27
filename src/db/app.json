@@ -216,7 +216,7 @@
    },
    {
      "id": 2,
-     "date": "2025-01-01",
+     "date": "2025-01-27",
      "hour": "16:00",
      "table": 3,
      "repeat": "daily",
@@ -226,7 +226,7 @@
    },
    {
      "id": 3,
-     "date": "2025-01-01",
+     "date": "2025-01-27",
      "hour": "12:00",
      "table": 3,
      "repeat": "daily",
@@ -236,7 +236,7 @@
    },
    {
      "id": 4,
-     "date": "2025-01-01",
+     "date": "2025-01-27",
      "hour": "13:00",
      "table": 2,
      "repeat": "daily",
@@ -246,7 +246,7 @@
    },
    {
      "id": 5,
-     "date": "2025-01-01",
+     "date": "2025-01-27",
      "hour": "18:00",
      "table": 2,
      "repeat": "daily",
@@ -255,5 +255,15 @@
      "starters": ["lemonWater"]
    }
  ],
- "bookings": []
+ "bookings": [
+   {
+      "id": 1,
+      "date": "2025-01-27",
+      "hour": "16:00",
+      "table": 1,
+      "duration": 3,
+      "ppl": 4,
+      "starters": ["water"]
+   }
+ ]
  }
