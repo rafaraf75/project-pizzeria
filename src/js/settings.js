@@ -3,8 +3,10 @@
       menuProduct: "#template-menu-product",
       cartProduct: '#template-cart-product',
       bookingWidget: '#template-booking-widget',
+      homeWidget: '#template-home-widget',
     },
     containerOf: {
+      home: '.home-wrapper',
       menu: "#product-list",
       cart: "#cart",
       pages: '#pages',
@@ -133,4 +135,6 @@
     bookingWidget: Handlebars.compile(
       document.querySelector(select.templateOf.bookingWidget).innerHTML
     ),
+    homeWidget: Handlebars.compile(
+      document.querySelector(select.templateOf.homeWidget).innerHTML),
   };
