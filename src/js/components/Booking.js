@@ -187,7 +187,7 @@ class Booking {
     const startersInputs = thisBooking.dom.wrapper.querySelectorAll('input[name="starter"]:checked');
     startersInputs.forEach(input => payload.starters.push(input.value));
 
-    console.log('📤 Wysyłanie rezerwacji:', payload);
+    console.log(' Wysyłanie rezerwacji:', payload);
 
     fetch(settings.db.url + '/' + settings.db.bookings, {
       method: 'POST',
@@ -196,9 +196,8 @@ class Booking {
     })
     .then(response => response.json())
     .then(response => {
-      console.log('✅ Rezerwacja zapisana:', response);
+      console.log(' Rezerwacja zapisana:', response);
 
-      // Aktualizujemy lokalnie listę zarezerwowanych stolików
       thisBooking.makeBooked(payload.date, payload.hour, payload.duration, payload.table);
       thisBooking.updateDOM();
 
@@ -211,9 +210,9 @@ class Booking {
       if (selectedTable) {
         selectedTable.classList.remove('selected');
       }
-      console.log('🔄 Formularz zresetowany!');
+      console.log(' Formularz zresetowany!');
     })
-    .catch(error => console.error("❌ Błąd podczas zapisywania rezerwacji:", error));
+    .catch(error => console.error(" Błąd podczas zapisywania rezerwacji:", error));
   }
 
   render(wrapper) {
@@ -273,7 +272,7 @@ class Booking {
         thisBooking.sendBooking();
       });
     } else {
-      console.error("❌ ERROR: Nie znaleziono formularza rezerwacji! Sprawdź selektor w settings.js.");
+      console.error(" ERROR: Nie znaleziono formularza rezerwacji! Sprawdź selektor w settings.js.");
     }
   }
   }
