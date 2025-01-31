@@ -136,5 +136,6 @@
       document.querySelector(select.templateOf.bookingWidget).innerHTML
     ),
     homeWidget: Handlebars.compile(
-      document.querySelector(select.templateOf.homeWidget).innerHTML),
+      document.querySelector(select.templateOf.homeWidget).innerHTML
+    ),
   };
