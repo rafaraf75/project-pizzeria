@@ -50,6 +50,7 @@
     },
     "dependencies": {
         "flickity": "^3.0.0",
-        "json-server": "^0.16.3"
+        "json-server": "^1.0.0-beta.3",
+        "tiny-slider": "^2.9.4"
     }
 }
