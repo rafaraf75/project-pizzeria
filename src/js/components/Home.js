@@ -1,57 +1,33 @@
-import { templates } from '../settings.js';
-
-
-
-
+import { templates } from "../settings.js";
+import Carousel from "./Carousel.js";
 class Home {
   constructor(wrapper) {
-    const thisHome = this;
-    thisHome.render(wrapper);
-    thisHome.initActions();
-    thisHome.initCarousel();
+    this.render(wrapper);
+    this.initActions();
+    this.initCarousel();
   }
 
   render(wrapper) {
-    const thisHome = this;
     const generatedHTML = templates.homeWidget();
-    thisHome.dom = {};
-    thisHome.dom.wrapper = wrapper;
-    thisHome.dom.wrapper.innerHTML = generatedHTML;
-    thisHome.dom.orderBox = thisHome.dom.wrapper.querySelector('.home-box--order');
-    thisHome.dom.bookingBox = thisHome.dom.wrapper.querySelector('.home-box--booking');
-    thisHome.dom.carousel = thisHome.dom.wrapper.querySelector('.carousel-track');
-    thisHome.dom.gallery = thisHome.dom.wrapper.querySelector('.gallery-wrapper');
+    this.dom = {};
+    this.dom.wrapper = wrapper;
+    this.dom.wrapper.innerHTML = generatedHTML;
+    this.dom.orderBox = this.dom.wrapper.querySelector(".home-box--order");
+    this.dom.bookingBox = this.dom.wrapper.querySelector(".home-box--booking");
+    this.dom.carousel = this.dom.wrapper.querySelector(".carousel");
+    this.dom.gallery = this.dom.wrapper.querySelector(".gallery-wrapper");
 
-    //thisHome.dom.orderBox.style.backgroundImage = "url('images/home/pizza-1.jpg')";
-    //thisHome.dom.bookingBox.style.backgroundImage = "url('images/home/pizza-2.jpg')";
-    thisHome.renderCarousel();
-    thisHome.renderGallery();
+    this.renderGallery();
   }
 
   initActions() {
     const thisHome = this;
-    thisHome.dom.orderBox.addEventListener('click', () => {
-      window.location.hash = '#order';
+    thisHome.dom.orderBox.addEventListener("click", () => {
+      window.location.hash = "#order";
     });
 
-    thisHome.dom.bookingBox.addEventListener('click', () => {
-      window.location.hash = '#booking';
-    });
-  }
-  renderCarousel() {
-    const thisHome = this;
-
-    const sliderContent = [
-      { text: "Best pizza in town!", author: "Anna" },
-      { text: "Amazing experience!", author: "John" },
-      { text: "We love Mamma Mia!", author: "Emily" },
-    ];
-
-    sliderContent.forEach(item => {
-      const slide = document.createElement('div');
-      slide.classList.add('carousel-slide');
-      slide.innerHTML = `<p>"${item.text}" - ${item.author}</p>`;
-      thisHome.dom.carousel.appendChild(slide);
+    thisHome.dom.bookingBox.addEventListener("click", () => {
+      window.location.hash = "#booking";
     });
   }
 
@@ -59,46 +35,56 @@ class Home {
     const thisHome = this;
 
     const galleryImages = [
-      'images/home/pizza-1.jpg',
-      'images/home/pizza-2.jpg',
-      'images/home/pizza-3.jpg',
-      'images/home/pizza-4.jpg',
-      'images/home/pizza-5.jpg',
-      'images/home/pizza-6.jpg',
+      "images/home/pizza-4.jpg",
+      "images/home/pizza-5.jpg",
+      "images/home/pizza-6.jpg",
+      "images/home/pizza-7.jpg",
+      "images/home/pizza-8.jpg",
+      "images/home/pizza-9.jpg",
     ];
 
-    galleryImages.forEach(src => {
-      const imgWrapper = document.createElement('div');
-      imgWrapper.classList.add('gallery-item');
+    galleryImages.forEach((src) => {
+      const imgWrapper = document.createElement("div");
+      imgWrapper.classList.add("gallery-item");
 
-      const img = document.createElement('img');
+      const img = document.createElement("img");
       img.src = src;
       img.alt = "Gallery image";
 
+      const overlay = document.createElement("div");
+      overlay.classList.add("overlay");
+
+      const likeIcon = document.createElement("i");
+      likeIcon.classList.add("fas", "fa-heart", "like-icon");
+
+      const shareIcon = document.createElement("i");
+      shareIcon.classList.add("fas", "fa-share-alt", "share-icon");
+
+      overlay.appendChild(likeIcon);
+      overlay.appendChild(shareIcon);
+
       imgWrapper.appendChild(img);
+      imgWrapper.appendChild(overlay);
       thisHome.dom.gallery.appendChild(imgWrapper);
+    });
+
+    document.querySelectorAll(".like-icon").forEach((icon) => {
+      icon.addEventListener("click", () => {
+        icon.classList.toggle("liked");
+      });
+    });
+
+    document.querySelectorAll(".share-icon").forEach((icon) => {
+      icon.addEventListener("click", () => {
+        alert("Udostępnianie zdjęcia...");
+      });
     });
   }
   initCarousel() {
-    const thisHome = this;
-
-
-    if (!thisHome.dom.carousel) {
-      console.error(" Błąd: Nie znaleziono elementu `.carousel-track`!");
-      return;
+    if (this.dom.carousel) {
+      new Carousel(this.dom.carousel);
     }
-    const Flickity = window.Flickity;
-    thisHome.flickity = new Flickity(thisHome.dom.carousel, {
-      cellAlign: 'left',
-      contain: true,
-      autoPlay: 3000,
-      wrapAround: true,
-      prevNextButtons: false,
-      pageDots: true,
-    });
-    console.log("🎉 Flickity działa!");
   }
-
 }
 
 export default Home;
