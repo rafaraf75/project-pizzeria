@@ -7,7 +7,7 @@
   <title>Pizzeria</title>
   <link href="https://fonts.googleapis.com/css?family=Lato:400,300i,700%7COswald:300,500,700&amp;subset=latin-ext" rel="stylesheet">
   <link href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flickity/2.2.2/flickity.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.4/tiny-slider.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <link rel="stylesheet" href="vendor/range-slider.min.css">
   <link rel="stylesheet" href="css/style.css">
@@ -249,44 +249,42 @@
     </div>
   </script>
   <script id="template-home-widget" type="text/x-handlebars-template">
-    <div class="home-widget">
-      <h2 class="page__title no-spacing">Welcome to Mamma Mia!</h2>
+    <div class="home-container">
+      <div class="home-widget">
 
       <div class="home-boxes">
         <div class="home-box home-box--order">
           <a href="#/order">
-            <h3>Order Online</h3>
+            <span class="home-box__title">ORDER ONLINE</span>
+            <span class="home-box__subtitle">Delicious food delivered to your door</span>
           </a>
         </div>
         <div class="home-box home-box--booking">
           <a href="#/booking">
-            <h3>Book a Table</h3>
+            <span class="home-box__title">BOOK A TABLE</span>
+            <span class="home-box__subtitle">Reserve your spot now</span>
           </a>
         </div>
       </div>
       <div class="opening-hours">
-        <h3>Opening Hours:</h3>
-        <p>Mon-Sun, 12PM - 11PM</p>
+        <h3 class="opening-hours__title">OPENING HOURS:</h3>
+        <p class="opening-hours__text">TUE-SUN, 12PM - 11PM</p>
       </div>
 
-      <!-- Kontener na slider -->
-      <div class="carousel">
-        <div class="carousel-track"></div>
-      </div>
+      <div class="carousel"></div>
 
-      <!-- Kontener na galerię -->
       <div class="gallery">
         <div class="gallery-wrapper"></div>
       </div>
     </div>
+    <div class="instagram-link">
+      <a href="https://www.instagram.com/" target="_blank">View more on Instagram</a>
+  </div>
   </script>
-
-
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.0/handlebars.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script src="vendor/range-slider.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/flickity/2.2.2/flickity.pkgd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.4/min/tiny-slider.js"></script>
   <script src="js/app.js" type="module"></script>
 </body>
 </html>
