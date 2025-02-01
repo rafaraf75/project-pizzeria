@@ -32,8 +32,12 @@ class HourPicker extends BaseWidget{
 
   renderValue(){
     const thisWidget = this;
-
     thisWidget.dom.output.innerHTML = thisWidget.value;
+  }
+
+  updateUI() {
+    this.dom.input.value = settings.hours.open;
+    this.renderValue();
   }
 }
 
