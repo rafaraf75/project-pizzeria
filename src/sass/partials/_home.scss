@@ -1,11 +1,10 @@
-.home-container {
-  max-width: 900px;
-  margin: 0 auto;
-  background-color: white;
-  padding: 20px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+.home-wrapper {
+  margin: ($base-size * 3.5) auto;
+  padding: ($base-size * 6) ($base-size * 4);
+  background: $color-light;
+  border-bottom: 1px solid lighten($color-dark, 70%);
+  border-radius: $radius;
 }
-
 .home-widget {
   text-align: center;
   padding: 20px;
@@ -194,8 +193,8 @@
 
 .gallery-item {
   position: relative;
-  width: 180px;
-  height: 180px;
+  width: 150px;
+  height: 150px;
   overflow: hidden;
   border-radius: 5px;
 }
