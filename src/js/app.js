@@ -4,8 +4,6 @@ import Cart from './components/Cart.js';
 import Booking from './components/Booking.js';
 import Home from './components/Home.js';
 
-
-
   const app = {
     initPages: function() {
       const thisApp = this;
@@ -35,6 +33,7 @@ import Home from './components/Home.js';
         });
       }
     },
+
     activatePage: function(pageId) {
       const thisApp = this;
 
@@ -51,6 +50,7 @@ import Home from './components/Home.js';
         );
       }
     },
+
     initData: function () {
       const thisApp = this;
       thisApp.data = {};
@@ -94,10 +94,8 @@ import Home from './components/Home.js';
     initBooking: function() {
       const thisApp = this;
 
-      // Find booking container
       const bookingContainer = document.querySelector(select.containerOf.booking);
 
-      // Create new instance of Booking
       thisApp.booking = new Booking(bookingContainer);
     },
     initHome: function () {
@@ -105,8 +103,6 @@ import Home from './components/Home.js';
       const homeContainer = document.querySelector(select.containerOf.home);
       thisApp.home = new Home(homeContainer);
     },
-
-
 
     init: function () {
       const thisApp = this;
