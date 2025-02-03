@@ -94,7 +94,7 @@
   export const settings = {
 
     db: {
-      url: '//' + window.location.hostname + (window.location.hostname=='localhost' ? ':3131' : ''),
+      url: 'https://6aee595f-b7d6-41a1-b0b6-bf60bda80c9-00-3p4f2a3vjh4p7.riker.replit.dev',
       products: 'products',
       orders: 'orders',
       bookings: 'bookings',
